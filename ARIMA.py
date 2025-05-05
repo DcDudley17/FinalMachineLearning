@@ -45,7 +45,7 @@ def arima_select(feature, filePath):
     #using boxcox to normalize varience
     #EauClaireData[feature], lam = boxcox(EauClaireData[feature])
 
-    # need to split train and test data
+    #TODO::Change this to use actualWeather.csv for test data
     trainData = featureData.iloc[:int(len(featureData)*0.8)]
     testData = featureData.iloc[int(len(featureData)*0.8):]
 
