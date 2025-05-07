@@ -8,12 +8,11 @@ from scipy.stats import boxcox
 from scipy.special import inv_boxcox
 
 
-def arima_select(feature, filePath):
+def arima_select(feature, filePath, testFile):
     weatherDat = pd.read_csv(filePath)
 
     featureData = weatherDat.loc[:, ['NAME', 'DATE', feature]].dropna()
     featureData['DATE'] = pd.to_datetime(featureData['DATE'])
-    #EauClaireData = tempData[tempData['NAME'] == "EAU CLAIRE RGNL AP, WI US"]
     plt.plot(featureData['DATE'], featureData[feature], c="blue")
     plt.show()
 
@@ -31,39 +30,34 @@ def arima_select(feature, filePath):
 
     """
     #Uncomment to check differencing required to make data stationary
-    EauClaireDataD1 = EauClaireData
-    EauClaireDataD1[feature] = EauClaireData[feature].diff().dropna()
-    plt.plot(EauClaireDataD1['DATE'], EauClaireDataD1[feature])
+    featureDataD1 = featureData
+    featureDataD1[feature] = featureDataD1[feature].diff().dropna()
+    plt.plot(featureDataD1['DATE'], featureDataD1[feature])
     plt.show()
     
-    result = adfuller(EauClaireData[feature])
+    result = adfuller(featureDataD1[feature])
     print('ADF Statistic:', result[0])
     print('p-value:', result[1])
     """
 
 
     #using boxcox to normalize varience
-    #EauClaireData[feature], lam = boxcox(EauClaireData[feature])
-
-    #TODO::Change this to use actualWeather.csv for test data
-    trainData = featureData.iloc[:int(len(featureData)*0.8)]
-    testData = featureData.iloc[int(len(featureData)*0.8):]
-
+    #featureData[feature], lam = boxcox(featureData[feature])
+    testData = pd.read_csv(testFile)
+    testData['DATE'] = pd.to_datetime(testData['DATE'])
 
     # remaining work is to rein in parameter tuning
-    model = ARIMA(trainData[feature], order=(28,1,12)).fit()
+    model = ARIMA(featureData[feature], order=(28,1,12)).fit()
     boxcox_forecast = model.forecast(len(testData))
+
     #undoing the boxcox transformation messes things up
     #forecasts = inv_boxcox(boxcox_forecast, lam)
 
-
-    plt.plot(trainData['DATE'], trainData[feature], c="blue")
+    plt.plot(featureData['DATE'], featureData[feature], c="blue")
     plt.plot(testData['DATE'], testData[feature], c="red")
     plt.plot(testData['DATE'], boxcox_forecast, c="green")
     plt.show()
 
     #check residual sum of squares
-    score = np.sum((boxcox_forecast - testData[feature])**2)
-    print(score)
-
-
+    #score = np.sum((boxcox_forecast - testData[feature])**2)
+    #print(score)
