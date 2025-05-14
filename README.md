@@ -1,5 +1,8 @@
 # FinalMachineLearning
 
+This project utilizes Linear regression, SVR, Random forest, ARIMA, SARIMA and Holt Winters exponential smoothing to forecast hourly weather data.
+We take in one month of hourly data as train data, run each model and test on a seperate validation set, then compare root mean squared error.
+
 Below is the link to a google slidshow going through what this project is. 
 https://docs.google.com/presentation/d/1K0o1jeUx8h5qf2DxzTMDn3KgiUY_LKQwvq-sRd3KZPI/edit?slide=id.g3535b6ead68_0_15#slide=id.g3535b6ead68_0_15
 
