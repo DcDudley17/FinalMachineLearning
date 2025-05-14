@@ -27,15 +27,15 @@ def click_on_map(event):
 
 #This is how we get the grid of the US
 us_states = gpd.read_file("https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json")
-final = pd.read_csv("Final.csv")[["LONGITUDE", "LATITUDE"]]
+final = pd.read_csv("MarchAprilWeatherData.csv")[["LONGITUDE", "LATITUDE"]]
 final = final.to_numpy()
 final = final[final[:, 0] > -105]
 final = final[final[:, 1] > 39]
 
 #Get the latitude, longitude and station location name
-stationsLatLon = pd.read_csv("Final.csv")[["NAME","LATITUDE", "LONGITUDE"]]
+stationsLatLon = pd.read_csv("MarchAprilWeatherData.csv")[["NAME","LATITUDE", "LONGITUDE"]]
 stationsLatLon = stationsLatLon.drop_duplicates()
-stationsFullTrain = pd.read_csv("Final.csv")
+stationsFullTrain = pd.read_csv("MarchAprilWeatherData.csv")
 stationsFullTrain['DATE'] = pd.to_datetime(stationsFullTrain['DATE'], format='%m/%d/%Y %H:%M')
 stationsFullTest = pd.read_csv("actualWeather.csv")
 stationsFullTest = stationsFullTest.drop(stationsFullTest.columns[[0,1]], axis=1)
